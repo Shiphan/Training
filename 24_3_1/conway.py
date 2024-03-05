@@ -52,10 +52,12 @@ def aliveNext(cells: list[int], row: int, column: int):
             return 0
 
 def printCells(cells: list[bool]):
+    outCells = ''
     for row, cellsRow in enumerate(cells):
         for column, cell in enumerate(cellsRow):
-            print('●' if cells[row][column] else '  ', end='')
-        print('')
+            outCells += '●' if cells[row][column] else '  '
+        outCells += '\n'
+    print(outCells)
 
 print('start with:')
 printCells(cells=cells)
