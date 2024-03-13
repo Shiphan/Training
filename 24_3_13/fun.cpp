@@ -15,6 +15,9 @@ class Node{
         Node* getPtr(){
             return ptr;
         }
+        void setNum(int num){
+            this->num = num;
+        }
         void setPtr(Node* ptr){
             this->ptr = ptr;
         }
@@ -25,21 +28,27 @@ class LinkedList{
         Node* startPtr = NULL;
         Node* endPtr = NULL;
     public:
-        void addNode(Node node){
+        void addNodeEnd(Node node){
             if (startPtr == NULL){
                 startPtr = &node;
-            } else {
-                endPtr->setPtr(&node);
             }
             endPtr = &node;
         }
-        void addNodefPtr(Node* ptr){
+        void addNodeEndfPtr(Node* ptr){
             if (startPtr == NULL){
                 startPtr = ptr;
             } else {
                 endPtr->setPtr(ptr);
             }
             endPtr = ptr;
+        }
+        void addNodeHeadfPtr(Node* ptr){
+            if (startPtr == NULL){
+                endPtr = ptr;
+            } else {
+                ptr->setPtr(startPtr);
+            }
+            startPtr = ptr;
         }
         void printList(){
             Node* ptr = startPtr;
@@ -55,18 +64,35 @@ class LinkedList{
 int main(){
     LinkedList list = LinkedList();
     Node* nodePtr = NULL;
+    char inLocation;
     int inNum;
     cout << "any number for add it to the list" << endl << "0 for quit" << endl;
     while (true){
-        cout << "No. ";
-        cin >> inNum;
-
-        if (inNum){
-            nodePtr = new Node(inNum);
-            list.addNodefPtr(nodePtr);
+        cout << "add at...(h/e): ";
+        cin >> inLocation;
+        if (inLocation != 'h' && inLocation != 'e'){
+            if (inLocation == '0'){
+                break;
+            } else {
+                cout << "*[h] for head or [e] for end" << endl;
+            }
         } else {
-            break;
+            cout << "No. ";
+            cin >> inNum;
+            cout << endl;
+            if (inNum){
+                nodePtr = new Node(inNum);
+                if (inLocation == 'h'){
+                    list.addNodeHeadfPtr(nodePtr);
+                } else {
+                    list.addNodeEndfPtr(nodePtr);
+                }
+                
+            } else {
+                break;
+            }
         }
     }
     list.printList();
+    system("pause");
 }
