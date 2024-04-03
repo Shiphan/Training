@@ -1,4 +1,5 @@
 #include <iostream>
+#include <cstring>
 
 class Node{
     private:
@@ -10,9 +11,7 @@ class Node{
     public:
         Node(int num, char name[10], int prg, int cmp, Node* ptr = NULL){
             this->num = num;
-            for (int i = 0; i < 10; i++){
-                this->name[i] = name[i];
-            }
+            strcpy(this->name, name);
             this->prg = prg;
             this->cmp = cmp;
 	    this->ptr = ptr;
@@ -37,9 +36,7 @@ class Node{
             return *this;
         }
         Node setName(char name[10]){
-            for (int i = 0; i < 10; i++){
-                this->name[i] = name[i];
-            }
+            strcpy(this->name, name);
             return *this;
         }
         Node setPrg(int prg){
@@ -96,15 +93,15 @@ class LinkedList{
             }
             return *this;
         }
-        bool isFound(int num){
+        Node* find(int num){
             Node* ptr = this->head;
             while (ptr != NULL){
                 if (ptr->getNum() == num){
-                    return true;
+                    return ptr;
                 }
                 ptr = ptr->getPtr();
             }
-            return false;
+            return NULL;
         }
         void print(){
             Node* ptr = this->head;
@@ -123,63 +120,92 @@ class LinkedList{
             std::cout << "||" << std::endl;
         }
         /*
-        LinkedList copy(){
-            LinkedList* newList = new LinkedList();
-            Node* ptr = this->head;
-            while (ptr != NULL){
-                Node* newNodePtr = new Node(ptr->getNum(), ptr->getName(), ptr->getPrg(), ptr->getCmp());
-                newList->addNodeEndfPtr(newNodePtr);
-                ptr = ptr->getPtr();
-            }	
-            return *newList; 
-        }
+	LinkedList copy(){
+		LinkedList* newList = new LinkedList();
+		Node* ptr = this->head;
+		while (ptr != NULL){
+			Node* newNodePtr = new Node(ptr->getNum(), ptr->getName(), ptr->getPrg(), ptr->getCmp());
+			newList->addNodeEndfPtr(newNodePtr);
+			ptr = ptr->getPtr();
+		}	
+		return *newList; 
+	}
         */
 };
 
-/*
-LinkedList operator+(LinkedList linkedList, Node* nodePtr){
-    return linkedList.copy().addNodeEndfPtr(nodePtr);
-}
+class Menu{
+    private:
+        int select;
+        // char content[];
+    public:
+        Menu() {
+            // strcpy(this->content, content);
+        }
+        void show(){
+            std::cout << "# Menu:\n1. add new data\n2. search by number\n0. get final result and exit\nyour select: ";
+            std::cin >> this->select;
+        }
+        int getSelect(){
+            return this->select;
+        }
+};
 
-LinkedList operator+(Node* nodePtr, LinkedList linkedList){
-    return linkedList.copy().addNodeHeadfPtr(nodePtr);
-}
-
-LinkedList operator+(LinkedList linkedList, Node node){
-    return linkedList.copy().addNodeEndfPtr(&node);
-}
-
-LinkedList operator+(Node node, LinkedList linkedList){
-    return linkedList.copy().addNodeHeadfPtr(&node);
-}
-*/
-
-int main() {
-    LinkedList list = LinkedList();
-    while (true){
-        int num;
+void addNodeMenu(LinkedList& list){
+    int num;
+    std::cout << "## Add data:\nnumber(<=0 for cancel): ";
+    std::cin >> num;
+    if (num <= 0){
+        std::cout << "add canceled.\n";
+    } else if (list.find(num)){
+        std::cout << "number existing.\nadd canceled.\n";
+    } else {
         char name[10];
         int prg;
         int cmp;
-        std::cout << "number(<=0 for quit): ";
-        std::cin >> num;
-        if (num <= 0){
-            break;
-        } else if (list.isFound(num)){
-            std::cout << "number existing." << std::endl;
-        } else {
-            std::cout << "name: ";
-            std::cin >> name;
-            std::cout << "Programming score: ";
-            std::cin >> prg;
-            std::cout << "Computer science score: ";
-            std::cin >> cmp;
-            Node* newNodePtr = new Node(num, name, prg, cmp);
-            list.addNodeNumfPtr(newNodePtr);
-        }
-        std::cout << std::endl;
+        std::cout << "name: ";
+        std::cin >> name;
+        std::cout << "Programming score: ";
+        std::cin >> prg;
+        std::cout << "Computer science score: ";
+        std::cin >> cmp;
+        Node* newNodePtr = new Node(num, name, prg, cmp);
+        list.addNodeNumfPtr(newNodePtr);
     }
-    std::cout << std::endl << "Result:" << std::endl;
-    list.print();
+}
+
+void searchMenu(LinkedList& list){
+    int searchNum;
+    std::cout << "## Search data by number:\nnumber: ";
+    std::cin >> searchNum;
+    Node* foundNode = list.find(searchNum);
+    if (foundNode != NULL){
+        std::cout << "name: " << foundNode->getName() << "\nProgramming score: " << foundNode->getPrg() << "\nComputer science score: " << foundNode->getCmp() << std::endl;
+    } else {
+        std::cout << "your search did not match any data, consider other number\n";
+    }
+}
+
+int main(){
+    Menu menu = Menu();
+    LinkedList list = LinkedList();
+    while (true){
+        menu.show();
+        int select = menu.getSelect();
+        if (select == 0){
+            // print result
+            list.print();
+            break;
+        } else {
+            if (select == 1){
+                addNodeMenu(list);
+            } else if (select == 2) {
+                // search data
+                searchMenu(list);
+            } else {
+                std::cout << "selection unfined, consider other option\n";
+            }
+            std::cout << std::endl;
+        }
+    }
     system("pause");
 }

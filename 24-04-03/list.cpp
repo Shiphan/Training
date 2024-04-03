@@ -1,3 +1,4 @@
+#include <cstring>
 #include <iostream>
 
 class Node{
@@ -10,9 +11,7 @@ class Node{
     public:
         Node(int num, char name[10], int prg, int cmp, Node* ptr = NULL){
             this->num = num;
-            for (int i = 0; i < 10; i++){
-                this->name[i] = name[i];
-            }
+            strcpy(this->name, name);
             this->prg = prg;
             this->cmp = cmp;
 	    this->ptr = ptr;
@@ -37,9 +36,7 @@ class Node{
             return *this;
         }
         Node setName(char name[10]){
-            for (int i = 0; i < 10; i++){
-                this->name[i] = name[i];
-            }
+            strcpy(this->name, name);
             return *this;
         }
         Node setPrg(int prg){
@@ -123,16 +120,16 @@ class LinkedList{
             std::cout << "||" << std::endl;
         }
         /*
-        LinkedList copy(){
-            LinkedList* newList = new LinkedList();
-            Node* ptr = this->head;
-            while (ptr != NULL){
-                Node* newNodePtr = new Node(ptr->getNum(), ptr->getName(), ptr->getPrg(), ptr->getCmp());
-                newList->addNodeEndfPtr(newNodePtr);
-                ptr = ptr->getPtr();
-            }	
-            return *newList; 
-        }
+	LinkedList copy(){
+		LinkedList* newList = new LinkedList();
+		Node* ptr = this->head;
+		while (ptr != NULL){
+			Node* newNodePtr = new Node(ptr->getNum(), ptr->getName(), ptr->getPrg(), ptr->getCmp());
+			newList->addNodeEndfPtr(newNodePtr);
+			ptr = ptr->getPtr();
+		}	
+		return *newList; 
+	}
         */
 };
 
