@@ -124,7 +124,7 @@ class LinkedList{
 				ptr = ptr->getPtr();
 			}
 			return found;
-	}
+		}
 		void printList(){
 			STNODE* ptr = this->head;
 			std::cout << "head -> ";
