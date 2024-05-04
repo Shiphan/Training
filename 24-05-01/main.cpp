@@ -43,7 +43,6 @@ public:
 
 class StudentNode1 :public Student {
 protected:
-	// StudentNode1* ptr;
 	int prg;
 	int eng;
 public:
@@ -53,14 +52,6 @@ public:
 		this->eng = eng;
 		this->sum = prg + eng;
 	}
-    /*   
-	void setPtr(StudentNode1* ptr) {
-		this->ptr = ptr;
-	}
-	StudentNode1* getPtr() override {
-		return this->ptr;
-	}
-    */
 	int getPrg() {
 		return this->prg;
 	}
@@ -86,7 +77,6 @@ public:
 
 class StudentNode2 :public Student {
 protected:
-	// StudentNode2* ptr;
 	int run;
 public:
 	StudentNode2(int num, std::string name, int run) :Student(num, name) {
@@ -94,14 +84,6 @@ public:
 		this->run = run;
 		this->sum = run;
 	}
-    /*   
-	void setPtr(StudentNode2* ptr) {
-		this->ptr = ptr;
-	}
-	StudentNode2* getPtr() override {
-		return this->ptr;
-	}
-    */
 	int getRun() {
 		return this->run;
 	}
@@ -202,8 +184,7 @@ public:
 		bool isPrinted[this->length] = {};
 		bool run = true;
 
-		while (run){ // not ready
-
+		while (run){
 			//get max that print
 			int sumMax;
 			Student* ptr = this->head;
@@ -390,23 +371,6 @@ bool menuSelectHandler(int select, int listIndex, StudentList lists[]) {
 }
 
 int main() {
-    /*
-    StudentList list = StudentList();
-    list.addNode(new StudentNode1(23, "name", 99, 90));
-    list.addNode(new StudentNode1(2, "cool name", 99, 90));
-    list.addNode(new StudentNode1(4, "cool name", 9, 90));
-    list.printList();
-    list.printTranscript();
-    
-    Student* node1 = new StudentNode1(23, "name", 99, 90);
-    Student* node2 = new StudentNode1(2, "cool name", 99, 90);
-    node1->setPtr(node2);
-    node1->printInfo();
-    std::cout << "?\n";
-    node1->getPtr()->printInfo();
-    std::cout << "?\n";
-    */
-	
 	bool running = true;
 	Menu menu = Menu();
 	StudentList lists[2] = {StudentList(), StudentList()};
