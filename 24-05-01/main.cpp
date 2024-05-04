@@ -6,6 +6,7 @@ protected:
 	int num;
 	std::string name;
 	int sum;
+    Student* ptr;
 public:
 	Student(int num, std::string name) {
 		this->num = num;
@@ -21,16 +22,28 @@ public:
 	int getSum() {
 		return this->sum;
 	}
-	void printInfo(){
+	virtual void setPtr(Student* ptr) {
+		this->ptr = ptr;
+	}
+	virtual Student* getPtr() {
+		return this->ptr;
+	}
+	virtual void printInfo(){
 		std::cout << "---" << std::endl;
 		std::cout << "No." << this->num << std::endl;
 		std::cout << "Name: " << this->name << std::endl;
 	}
+	virtual void printRank(int rank) {
+		std::cout << "---" << std::endl;
+		std::cout << rank << " place" << std::endl;
+		std::cout << "No." << this->num << std::endl;
+		std::cout << "Name: " << this->name << std::endl;
+    }
 };
 
 class StudentNode1 :public Student {
 protected:
-	StudentNode1* ptr;
+	// StudentNode1* ptr;
 	int prg;
 	int eng;
 public:
@@ -40,20 +53,30 @@ public:
 		this->eng = eng;
 		this->sum = prg + eng;
 	}
+    /*   
 	void setPtr(StudentNode1* ptr) {
 		this->ptr = ptr;
 	}
-	StudentNode1* getPtr() {
+	StudentNode1* getPtr() override {
 		return this->ptr;
 	}
+    */
 	int getPrg() {
 		return this->prg;
 	}
 	int getEng() {
 		return this->eng;
 	}
-	void printInfo() {
+	void printInfo() override {
 		std::cout << "---" << std::endl;
+		std::cout << "No." << this->num << std::endl;
+		std::cout << "Name: " << this->name << std::endl;
+		std::cout << "Programming score: " << this->prg << std::endl;
+		std::cout << "English score: " << this->eng << std::endl;
+	}
+	void printRank(int rank) override {
+		std::cout << "---" << std::endl;
+		std::cout << rank << " place" << std::endl;
 		std::cout << "No." << this->num << std::endl;
 		std::cout << "Name: " << this->name << std::endl;
 		std::cout << "Programming score: " << this->prg << std::endl;
@@ -63,43 +86,53 @@ public:
 
 class StudentNode2 :public Student {
 protected:
-	StudentNode2* ptr;
+	// StudentNode2* ptr;
 	int run;
 public:
 	StudentNode2(int num, std::string name, int run) :Student(num, name) {
+		this->ptr = nullptr;
 		this->run = run;
 		this->sum = run;
 	}
+    /*   
 	void setPtr(StudentNode2* ptr) {
 		this->ptr = ptr;
 	}
-	StudentNode2* getPtr() {
+	StudentNode2* getPtr() override {
 		return this->ptr;
 	}
+    */
 	int getRun() {
 		return this->run;
 	}
-	void printInfo() {
+	void printInfo() override {
 		std::cout << "---" << std::endl;
 		std::cout << "No." << this->num << std::endl;
 		std::cout << "Name: " << this->name << std::endl;
 		std::cout << "Run score: " << this->run << std::endl;
 	}
+	void printRank(int rank) override {
+		std::cout << "---" << std::endl;
+		std::cout << rank << " place" << std::endl;
+		std::cout << "No." << this->num << std::endl;
+		std::cout << "Name: " << this->name << std::endl;
+		std::cout << "Run score: " << this->run << std::endl;
+    }
 };
 
-class Student1List {
+class StudentList {
 protected:
-	StudentNode1* head;
-	StudentNode1* endPtr;
+	Student* head;
+	Student* endPtr;
 	int length;
 public:
-	Student1List() {
+	StudentList() {
 		this->head = nullptr;
 		this->endPtr = nullptr;
 		this->length = 0;
 	}
-	void addNodeEndfPtr(StudentNode1* nodePtr) {
-		if (this->head == NULL){
+	void addNode(Student* nodePtr) {
+		if (this->head == nullptr){
 			this->head = nodePtr;
 		} else {
 			endPtr->setPtr(nodePtr);
@@ -108,7 +141,7 @@ public:
 		this->length++;
 	}
 	bool removeNodefNum(int num){
-		StudentNode1* ptr = this->head;
+		Student* ptr = this->head;
 		if (head == NULL){
 			return false;
 		} else if (this->head->getNum() == num){
@@ -119,7 +152,7 @@ public:
 		} else {
 			while (ptr->getPtr() != NULL){
 				if (ptr->getPtr()->getNum() == num){
-					StudentNode1* newPtr = ptr->getPtr()->getPtr();
+					Student* newPtr = ptr->getPtr()->getPtr();
 					delete ptr->getPtr();
 					ptr->setPtr(newPtr);
 					this->length--;
@@ -130,8 +163,8 @@ public:
 			return false;
 		}
 	}
-	StudentNode1* findFirst(int num){
-		StudentNode1* ptr = this->head;
+	Student* findFirst(int num){
+		Student* ptr = this->head;
 		while (ptr != NULL){
 			if (ptr->getNum() == num){
 				return ptr;
@@ -141,7 +174,7 @@ public:
 		return NULL;
 	}
 	bool findAndPrintAllfName(std::string name){
-		StudentNode1* ptr = this->head;
+		Student* ptr = this->head;
 		bool found = false;
 		while (ptr != NULL){
 			if (ptr->getName() == name){
@@ -153,7 +186,7 @@ public:
 		return found;
 	}
 	void printList() {
-		StudentNode1* ptr = this->head;
+		Student* ptr = this->head;
 		std::cout << "head -> ";
 		while (ptr){
 			std::cout << ptr->getNum();
@@ -173,7 +206,7 @@ public:
 
 			//get max that print
 			int sumMax;
-			StudentNode1* ptr = this->head;
+			Student* ptr = this->head;
 			int i = 0;
 			while (ptr != NULL){
 				if (!i[isPrinted]){
@@ -211,10 +244,9 @@ public:
 			while (ptr != NULL){
 				int sum = ptr->getSum();
 				if (sum == sumMax && !i[isPrinted]){
-					std::cout << "[" << sort << "]";
 					realSort++;
 					isPrinted[i] = true;
-					ptr->printInfo();
+					ptr->printRank(sort);
 							
 					//std::cout << "5\n";
 				}
@@ -228,244 +260,159 @@ public:
 	}
 };
 
-class Student2List {
-protected:
-	StudentNode2* head;
-	StudentNode2* endPtr;
-	int length;
+class Menu{
+private:
+	int select;
+	int listIndex;
 public:
-	Student2List() {
-		this->head = nullptr;
-		this->endPtr = nullptr;
-		this->length = 0;
+	Menu() {
+		this->select = -1;
+		this->listIndex = -1;
 	}
-	void addNodeEndfPtr(StudentNode2* nodePtr) {
-		if (this->head == NULL){
-			this->head = nodePtr;
+	void show(){
+		std::cout << "######################" << std::endl;
+		std::cout << "	MENU" << std::endl;
+		std::cout << "(1). Insertion" << std::endl;
+		std::cout << "(2). Search" << std::endl;
+		std::cout << "(3). Deletion" << std::endl;
+		std::cout << "(4). Print List Data" << std::endl;
+		std::cout << "(5). Print Transcript" << std::endl;
+		std::cout << "(0). Exit" << std::endl;
+		std::cout << "Please select one... ";
+		std::cin >> this->select;
+		if (this->select < 1 || this->select > 5) {
+			this->listIndex = -1;
 		} else {
-			endPtr->setPtr(nodePtr);
+			std::cout << "Lists of students:" << std::endl;
+			std::cout << "(0). Computer Science" << std::endl;
+			std::cout << "(1). Physical Education" << std::endl;
+			std::cout << "Please select one... ";
+			std::cin >> this->listIndex;
 		}
-		endPtr = nodePtr;
-		this->length++;
+		
 	}
-	bool removeNodefNum(int num){
-		StudentNode2* ptr = this->head;
-		if (head == NULL){
+	int getSelect(){
+		return this->select;
+	}
+	int getListIndex(){
+		return this->listIndex;
+	}
+};
+
+void insertion(StudentList lists[], int listIndex) {
+	int num;
+	std::cout << "## Add data:" << std::endl << "number(<=0 for cancel): ";
+	std::cin.ignore();
+	std::cin >> num;
+	if (num <= 0){
+		std::cout << "add canceled." << std::endl;
+	} else if (lists[listIndex].findFirst(num)){
+		std::cout << "number existing." << std::endl;
+		std::cout << "add canceled." << std::endl;
+	} else {
+		std::string name;
+		std::cout << "name: ";
+		std::cin.ignore();
+		std::getline(std::cin, name);
+		switch (listIndex) {
+			case 0: {
+				int prg;
+				int eng;
+				std::cout << "Programming score: ";
+				std::cin >> prg;
+				std::cout << "English score: ";
+				std::cin >> eng;
+				Student* newNodePtr = new StudentNode1(num, name, prg, eng);
+				lists[0].addNode(newNodePtr);
+				break;
+			}
+			case 1: {
+				int run;
+				std::cout << "Run score: ";
+				std::cin >> run;
+				Student* newNodePtr = new StudentNode2(num, name, run);
+				lists[1].addNode(newNodePtr);
+				break;
+			}
+			default: {
+				std::cout << "invalid list index." << std::endl;
+				break;
+			}
+		}
+	}
+}
+
+void search(StudentList& list) {
+	std::cout << "search by name... ";
+	std::string name;
+	std::cin.ignore();
+	std::getline(std::cin, name);
+	if (!list.findAndPrintAllfName(name)) {
+		std::cout << "No match result." << std::endl;
+	}
+}
+
+void remove(StudentList& list) {
+	int rmNum;
+	std::cout << "select the number you want to delete... ";
+	std::cin >> rmNum;
+	if (list.removeNodefNum(rmNum)){
+		std::cout << "No." << rmNum << " has been deleted." << std::endl;
+	} else {
+		std::cout << "No." << rmNum << " is not in the list." << std::endl;
+	}
+}
+
+bool menuSelectHandler(int select, int listIndex, StudentList lists[]) {
+	switch (select) {
+		case 0:
+			std::cout << "exit..." << std::endl;
 			return false;
-		} else if (this->head->getNum() == num){
-			this->head = this->head->getPtr();
-			delete ptr;
-			this->length--;
+		case 1:
+			insertion(lists, listIndex);
 			return true;
-		} else {
-			while (ptr->getPtr() != NULL){
-				if (ptr->getPtr()->getNum() == num){
-					StudentNode2* newPtr = ptr->getPtr()->getPtr();
-					delete ptr->getPtr();
-					ptr->setPtr(newPtr);
-					this->length--;
-					return true;
-				}
-				ptr = ptr->getPtr();
-			}class MENU{
-	private:
-		int select;
-	public:
-		MENU() {
-			this->select = -1;
-		}
-		void show(){
-			std::cout << "######################" << std::endl;
-			std::cout << "	MENU" << std::endl;
-			std::cout << "(1). Insertion" << std::endl;
-			std::cout << "(2). Search" << std::endl;
-			std::cout << "(3). Deletion" << std::endl;
-			std::cout << "(4). Print List Data" << std::endl;
-			std::cout << "(5). Print Transcript" << std::endl;
-			std::cout << "(0). Exit" << std::endl;
-			std::cout << "Please select one... ";
-		}
-		int readselect(){
-			return this->select;
-		}
-		void writeselect(int select){
-			this->select = select;
-		}
-}
-			return false;
-		}
-	}
-	StudentNode2* findFirst(int num){
-		StudentNode2* ptr = this->head;
-		while (ptr != NULL){
-			if (ptr->getNum() == num){
-				return ptr;
-			}
-			ptr = ptr->getPtr();
-		}
-		return NULL;
-	}
-	bool findAndPrintAllfName(std::string name){
-		StudentNode2* ptr = this->head;
-		bool found = false;
-		while (ptr != NULL){
-			if (ptr->getName() == name){
-				ptr->printInfo();
-				found = true;
-			}
-			ptr = ptr->getPtr();
-		}
-		return found;
-	}
-	void printList() {
-		StudentNode2* ptr = this->head;
-		std::cout << "head -> ";
-		while (ptr){
-			std::cout << ptr->getNum();
-			std::cout << " -> ";
-			ptr = ptr->getPtr();
-		}
-		std::cout << "||" << std::endl;
-	}
-	void printTranscript() {
-		//print transcript
-		int realSort = 1;
-		int sort = 1;
-		bool isPrinted[this->length] = {};
-		bool run = true;
-
-		while (run){ // not ready
-
-			//get max that print
-			int sumMax;
-			StudentNode2* ptr = this->head;
-			int i = 0;
-			while (ptr != NULL){
-				if (!i[isPrinted]){
-					sumMax = ptr->getSum();
-
-					//std::cout << "1\n";
-					break;
-				} else if (ptr->getPtr() == NULL) {
-					run = false;
-					
-					//std::cout << "2\n";
-				}
-				ptr = ptr->getPtr();
-				i++;
-			}
-			i = 0;
-			ptr = this->head;
-			while (ptr != NULL){
-				int sum = ptr->getSum();
-				if (!i[isPrinted] && sum > sumMax){
-					sumMax = sum;
-
-					//std::cout << "3\n";
-				}
-				ptr = ptr->getPtr();
-				i++;
-				
-				//std::cout << "4\n";
-			}
-			//got it
-			
-			//print node that match
-			i = 0;
-			ptr = this->head;
-			while (ptr != NULL){
-				int sum = ptr->getSum();
-				if (sum == sumMax && !i[isPrinted]){
-					std::cout << "[" << sort << "]";
-					realSort++;
-					isPrinted[i] = true;
-					ptr->printInfo();
-							
-					//std::cout << "5\n";
-				}
-				ptr = ptr->getPtr();
-				i++;
-						
-				//std::cout << "6\n";
-			}
-			sort = realSort;
-		}
-	}
-};
-class MENU{
-	private:
-		int select;
-	public:
-		MENU() {
-			this->select = -1;
-		}
-		void show(){
-			std::cout << "######################" << std::endl;
-			std::cout << "	MENU" << std::endl;
-			std::cout << "(1). Insertion" << std::endl;
-			std::cout << "(2). Search" << std::endl;
-			std::cout << "(3). Deletion" << std::endl;
-			std::cout << "(4). Print List Data" << std::endl;
-			std::cout << "(5). Print Transcript" << std::endl;
-			std::cout << "(0). Exit" << std::endl;
-			std::cout << "Please select one... ";
-		}
-		int readselect(){
-			return this->select;
-		}
-		void writeselect(int select){
-			this->select = select;
-		}
-};
-
-void insertion(Student1List& list){
-	int num;
-	std::cout << "## Add data:" << std::endl << "number(<=0 for cancel): ";
-	std::cin.ignore();
-	std::cin >> num;
-	if (num <= 0){
-		std::cout << "add canceled." << std::endl;
-	} else if (list.findFirst(num)){
-		std::cout << "number existing." << std::endl << "add canceled." << std::endl;
-	} else {
-		std::string name;
-		int prg;
-		int eng;
-		std::cout << "name: ";
-		std::cin.ignore();
-		std::getline(std::cin, name);
-		std::cout << "Programming score: ";
-		std::cin >> prg;
-		std::cout << "English score: ";
-		std::cin >> eng;
-		StudentNode1* newNodePtr = new StudentNode1(num, name, prg, eng);
-		list.addNodeEndfPtr(newNodePtr);
-	}
-}
-
-void insertion(Student2List& list){
-	int num;
-	std::cout << "## Add data:" << std::endl << "number(<=0 for cancel): ";
-	std::cin.ignore();
-	std::cin >> num;
-	if (num <= 0){
-		std::cout << "add canceled." << std::endl;
-	} else if (list.findFirst(num)){
-		std::cout << "number existing." << std::endl << "add canceled." << std::endl;
-	} else {
-		std::string name;
-		int run;
-		std::cout << "name: ";
-		std::cin.ignore();
-		std::getline(std::cin, name);
-		std::cout << "Run score: ";
-		std::cin >> run;
-		StudentNode2* newNodePtr = new StudentNode2(num, name, run);
-		list.addNodeEndfPtr(newNodePtr);
+		case 2:
+			search(lists[listIndex]);
+			return true;
+		case 3:
+			remove(lists[listIndex]);
+			return true;
+		case 4:
+			lists[listIndex].printList();
+			return true;
+		case 5:
+			lists[listIndex].printTranscript();
+			return true;
+		default:
+			std::cout << "selection unfined, consider other option" << std::endl;
+			return true;
 	}
 }
 
 int main() {
-	StudentNode1 stun1 = StudentNode1(1, "name", 80, 76);
-	stun1.printInfo();
+    /*
+    StudentList list = StudentList();
+    list.addNode(new StudentNode1(23, "name", 99, 90));
+    list.addNode(new StudentNode1(2, "cool name", 99, 90));
+    list.addNode(new StudentNode1(4, "cool name", 9, 90));
+    list.printList();
+    list.printTranscript();
+    
+    Student* node1 = new StudentNode1(23, "name", 99, 90);
+    Student* node2 = new StudentNode1(2, "cool name", 99, 90);
+    node1->setPtr(node2);
+    node1->printInfo();
+    std::cout << "?\n";
+    node1->getPtr()->printInfo();
+    std::cout << "?\n";
+    */
+	
+	bool running = true;
+	Menu menu = Menu();
+	StudentList lists[2] = {StudentList(), StudentList()};
+
+	while (running) {
+		menu.show();
+		running = menuSelectHandler(menu.getSelect(), menu.getListIndex(), lists);
+	}
 }

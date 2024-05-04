@@ -4,7 +4,7 @@ class A:
     def __init__(self, value: int):
         self.value = value
     
-    def printit():
+    def printit(self):
         print(f"A: ${self.value}")
         
 class B (A):

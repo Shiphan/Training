@@ -9,7 +9,7 @@ public:
 	A(int value) {
         this->value = value;
     }
-	void printit() {
+	virtual void printit() {
         std::cout << "A: " << this->value << std::endl;
 	}
     int getValue() {
@@ -27,7 +27,7 @@ public:
         this->name = name;
     };
 
-	void printit() {
+	void printit() override {
         std::cout << "B: " << this->getValue() << ", " << this->name << std::endl;
 	}
 	std::string getName() {
