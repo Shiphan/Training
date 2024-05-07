@@ -178,6 +178,11 @@ public:
 		std::cout << "||" << std::endl;
 	}
 	void printTranscript() {
+		if (this->length <= 0) {
+			std::cout << "There is no student data." << std::endl;
+			return;
+		}
+
 		//print transcript
 		int realSort = 1;
 		int sort = 1;
