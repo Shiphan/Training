@@ -1,3 +1,5 @@
+use std::io;
+
 use bracket::*;
 use element::*;
 use operator::*;
@@ -89,6 +91,7 @@ fn main() {
         ope(multiply),
         num(10 as f64),
     ];
+    let input = get_input();
     // ((A + B * C) / (D - E) * F) + (G / H - I) * J
     println!("{:?}", input);
     println!("{:?}", convert(input));
@@ -122,6 +125,46 @@ impl operator {
             operator::multiply | operator::division => 2,
         }
     }
+}
+
+fn get_input() -> Vec<element> {
+    let mut input = String::new();
+    let mut result = vec![];
+
+    io::stdin().read_line(&mut input).unwrap();
+
+    let mut index = 0;
+    let input = input.trim().chars().collect::<Vec<char>>();
+    while index < input.len() {
+        match input[index] {
+            '+' => result.push(ope(plus)),
+            '-' => result.push(ope(minus)),
+            '*' => result.push(ope(multiply)),
+            '/' => result.push(ope(division)),
+            '(' => result.push(bra(left)),
+            ')' => result.push(bra(right)),
+            '0'..='9' => {
+                let mut i = vec![input[index]];
+                loop {
+                    match input.get(index + 1) {
+                        None => break,
+                        Some(n) => match n {
+                            '0'..='9' | '.' => {
+                                i.push(n.clone());
+                                index += 1;
+                            }
+                            _ => break,
+                        },
+                    }
+                }
+                result.push(num(i.into_iter().collect::<String>().parse().unwrap()));
+            }
+            _ => panic!("invalid input"),
+        }
+        index += 1;
+    }
+
+    result
 }
 
 fn convert(source: Vec<element>) -> Vec<element> {
