@@ -94,7 +94,10 @@ fn main() {
     let input = get_input();
     // ((A + B * C) / (D - E) * F) + (G / H - I) * J
     println!("{:?}", input);
-    println!("{:?}", convert(input));
+    println!();
+    let out = convert(input);
+    println!("{:?}", out);
+    println!("{}", out.iter().map(|a| format!("{}", a)).collect::<String>());
 }
 
 #[derive(Debug)]
@@ -123,6 +126,36 @@ impl operator {
         match self {
             operator::plus | operator::minus => 1,
             operator::multiply | operator::division => 2,
+        }
+    }
+}
+
+impl std::fmt::Display for operator {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{}", match self {
+            plus => "+",
+            minus => "-",
+            multiply => "*",
+            division => "/",
+        })
+    }
+}
+
+impl std::fmt::Display for bracket {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{}", match self {
+            left => "(",
+            right => ")",
+        })
+    }
+}
+
+impl std::fmt::Display for element {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            ope(o) => write!(f, "{}", o),
+            num(n) => write!(f, "{}", n),
+            bra(b) => write!(f, "{}", b),
         }
     }
 }
@@ -171,9 +204,9 @@ fn convert(source: Vec<element>) -> Vec<element> {
     let mut result: Vec<element> = vec![];
     let mut hold: Vec<element> = vec![];
     for elem in source {
-        println!();
-        println!("result: {:?}", result);
-        println!("hold: {:?}", hold);
+        // println!();
+        // println!("result: {:?}", result);
+        // println!("hold: {:?}", hold);
         match elem {
             element::num(number) => hold.push(element::num(number)),
             element::ope(operator) => {
@@ -193,7 +226,7 @@ fn convert(source: Vec<element>) -> Vec<element> {
                                 }
                             }
                             element::bra(bracket::right) => {
-                                println!("I am in!!!");
+                                // println!("I am in!!!");
                                 hold.push(bra(right));
                                 let mut i = 1;
                                 while i > 0 {
@@ -204,10 +237,10 @@ fn convert(source: Vec<element>) -> Vec<element> {
                                         _ => (),
                                     }
                                     hold.push(out);
-                                    println!("result: {:?}", result);
-                                    println!("hold: {:?}", hold);
+                                    // println!("result: {:?}", result);
+                                    // println!("hold: {:?}", hold);
                                 }
-                                println!("I am out!!!");
+                                // println!("I am out!!!");
                             }
                             element::bra(bracket::left) => {
                                 result.push(element::bra(bracket::left));
@@ -216,7 +249,7 @@ fn convert(source: Vec<element>) -> Vec<element> {
                         },
                     };
                 };
-                println!("I am in!!!");
+                // println!("I am in!!!");
                 while put_back > 0 {
                     match hold.pop().unwrap() {
                         num(n) => {
@@ -243,10 +276,10 @@ fn convert(source: Vec<element>) -> Vec<element> {
                         }
                         bra(right) => panic!("wtf"),
                     }
-                    println!("result: {:?}", result);
-                    println!("hold: {:?}", hold);
+                    // println!("result: {:?}", result);
+                    // println!("hold: {:?}", hold);
                 }
-                println!("I am out!!!");
+                // println!("I am out!!!");
                 result.push(element::ope(operator));
                 while !hold.is_empty() {
                     result.push(hold.pop().unwrap());
@@ -266,7 +299,7 @@ fn convert(source: Vec<element>) -> Vec<element> {
         result.push(hold.pop().unwrap());
     }
 
-    println!("result: {:?}", result);
+    // println!("result: {:?}", result);
 
     result
         .into_iter()
